@@ -1,35 +1,27 @@
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
-import { useForm } from 'react-hook-form'
 
 import { useCreatePlaylist } from '../api'
 
 export const CreatePlaylist = ({ token, userId, topArtists }) => {
   const [result, setResult] = useState([])
-  const [input, setInput] = useState('')
+  const [searchInput, setSearchInput] = useState('')
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [tracksType, setTracksType] = useState('top')
   const [selectedArtists, setSelectedArtists] = useState([])
-  const topArtistsUserIds = topArtists?.map((i) => i.id).slice(0, 10)
-  console.log(topArtistsUserIds)
+  const artistsIds = selectedArtists.length
+    ? selectedArtists.map((i) => i.id)
+    : topArtists?.map((i) => i.id).slice(0, 10)
+  console.log(artistsIds)
+
   let history = useHistory()
 
   const { createPlaylist, response, loading, error } = useCreatePlaylist(
     token,
-    userId,
-    topArtistsUserIds
+    userId
   )
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({
-    defaultValues: {
-      name: '',
-      description: '',
-      search: '',
-    },
-  })
 
   if (!token) {
     history.push('/login')
@@ -43,8 +35,6 @@ export const CreatePlaylist = ({ token, userId, topArtists }) => {
     return <div>Oops, something went wrong...</div>
   }
 
-  const onSubmit = (data) => console.log(data)
-
   const myHeader = {
     Authorization: `Bearer ${token}`,
     Accept: 'application/json',
@@ -52,7 +42,7 @@ export const CreatePlaylist = ({ token, userId, topArtists }) => {
   }
 
   const searchSpotify = (e) => {
-    setInput(e.currentTarget.value)
+    setSearchInput(e.currentTarget.value)
     if (e.currentTarget.value !== '') {
       axios({
         url: `https://api.spotify.com/v1/search?q=${encodeURI(
@@ -70,8 +60,8 @@ export const CreatePlaylist = ({ token, userId, topArtists }) => {
 
   const handleSelectArtistClick = (i) => {
     setSelectedArtists((old) => [...old, i])
+    setSearchInput('')
     setResult([])
-    reset({ search: '' })
   }
   const handleUnselectArtistClick = (i) => {
     setSelectedArtists((old) => old.filter((el) => el.id !== i.id))
@@ -83,26 +73,36 @@ export const CreatePlaylist = ({ token, userId, topArtists }) => {
         history.push(`/playlist/${response.id}`)
       ) : (
         <>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form>
             <div>
-              <label htmlFor="name">PLAYLIST</label>
+              <label htmlFor="playlistName">PLAYLIST</label>
               <input
                 type="text"
-                {...register('name', {
-                  required: 'Please provide a name for your playlist',
-                })}
+                name="playlistName"
+                id="playlistName"
+                value={name}
+                onChange={(e) => setName(e.currentTarget.value)}
               />
             </div>
-            {errors?.name && <div>{errors?.name.message}</div>}
             <div>
-              <label htmlFor="description">DESCRIPTION</label>
-              <input type="text" {...register('description')} />
+              <label htmlFor="playlistDescription">DESCRIPTION</label>
+              <input
+                type="text"
+                name="playlistDescription"
+                id="playlistDescription"
+                value={description}
+                onChange={(e) => setDescription(e.currentTarget.value)}
+              />
             </div>
             <div>
               <input
                 type="text"
                 placeholder="Search for artists"
-                {...register('search', { onChange: searchSpotify, input })}
+                autoComplete="new-password"
+                name="spotifySearch"
+                id="spotifySearch"
+                value={searchInput}
+                onChange={searchSpotify}
               />
             </div>
             {result.map((i) => {
@@ -112,7 +112,15 @@ export const CreatePlaylist = ({ token, userId, topArtists }) => {
                 </div>
               )
             })}
-            <button type="submit">submit</button>
+            <select
+              name="tracksType"
+              id="tracksType"
+              value={tracksType}
+              onChange={(e) => setTracksType(e.currentTarget.value)}
+            >
+              <option value="top">Top tracks</option>
+              <option value="all">All tracks</option>
+            </select>
           </form>
           <h3>Selected:</h3>
           {selectedArtists.map((i) => (
@@ -121,7 +129,9 @@ export const CreatePlaylist = ({ token, userId, topArtists }) => {
               <span onClick={() => handleUnselectArtistClick(i)}> X </span>
             </div>
           ))}
-          <button onClick={() => createPlaylist()}>Create</button>
+          <button onClick={() => createPlaylist(name, description, artistsIds)}>
+            Create
+          </button>
         </>
       )}
     </>

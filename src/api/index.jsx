@@ -77,18 +77,18 @@ export const useGetTopArtists = (accessToken, setTopArtists) => {
   return { loading, error }
 }
 
-export const useCreatePlaylist = (accessToken, userId, ids) => {
+export const useCreatePlaylist = (accessToken, userId) => {
   const [response, setResponse] = useState()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
 
-  const postData = {
-    name: 'Test',
-    description: 'This is a description',
-  }
-
-  const createPlaylist = async () => {
+  const createPlaylist = async (name, description, artistIds) => {
     setLoading(true)
+
+    const postData = {
+      name,
+      description,
+    }
 
     // create a empty playlist
     const playlist = await axios({
@@ -106,8 +106,8 @@ export const useCreatePlaylist = (accessToken, userId, ids) => {
         setError(true)
       })
 
-    // get top tracks ids from top artists
-    const calls = await ids.map((id) =>
+    // get top tracks ids from artists
+    const calls = await artistIds.map((id) =>
       axios.get(
         `https://api.spotify.com/v1/artists/${id}/top-tracks?market=BE`,
         {
