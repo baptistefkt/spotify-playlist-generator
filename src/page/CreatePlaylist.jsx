@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import { useCreatePlaylist } from '../api'
 
-export const CreatePlaylist = ({ token, userId, topArtists }) => {
+export const CreatePlaylist = ({ token, userInfo, topArtists }) => {
   const [result, setResult] = useState([])
   const [searchInput, setSearchInput] = useState('')
   const [name, setName] = useState('')
@@ -14,18 +14,14 @@ export const CreatePlaylist = ({ token, userId, topArtists }) => {
   const artistsIds = selectedArtists.length
     ? selectedArtists.map((i) => i.id)
     : topArtists?.map((i) => i.id).slice(0, 10)
-  console.log(artistsIds)
 
   let history = useHistory()
 
   const { createPlaylist, response, loading, error } = useCreatePlaylist(
     token,
-    userId
+    userInfo.id,
+    userInfo.country
   )
-
-  if (!token) {
-    history.push('/login')
-  }
 
   if (loading) {
     return <div>creating your playlist...</div>
@@ -70,7 +66,12 @@ export const CreatePlaylist = ({ token, userId, topArtists }) => {
   return (
     <>
       {response ? (
-        history.push(`/playlist/${response.id}`)
+        <>
+          <div>Your playlist has been successfuly created</div>
+          <button onClick={() => history.push(`/playlist/${response.id}`)}>
+            View my playlist
+          </button>
+        </>
       ) : (
         <>
           <form>
@@ -118,7 +119,7 @@ export const CreatePlaylist = ({ token, userId, topArtists }) => {
               value={tracksType}
               onChange={(e) => setTracksType(e.currentTarget.value)}
             >
-              <option value="top">Top tracks</option>
+              <option value="top">Only top tracks</option>
               <option value="all">All tracks</option>
             </select>
           </form>
@@ -129,7 +130,11 @@ export const CreatePlaylist = ({ token, userId, topArtists }) => {
               <span onClick={() => handleUnselectArtistClick(i)}> X </span>
             </div>
           ))}
-          <button onClick={() => createPlaylist(name, description, artistsIds)}>
+          <button
+            onClick={() =>
+              createPlaylist(name, description, artistsIds, tracksType)
+            }
+          >
             Create
           </button>
         </>

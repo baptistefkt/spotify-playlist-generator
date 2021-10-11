@@ -1,4 +1,4 @@
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useGetPlaylists, useGetTopArtists, useGetUserInfo } from '../api'
 
 export const Home = ({
@@ -20,14 +20,14 @@ export const Home = ({
   const { loading: topArtistsLoading, error: topArtistsError } =
     useGetTopArtists(token, setTopArtists)
 
-  let history = useHistory()
+  // let history = useHistory()
 
   const loading = userLoading || playlistLoading || topArtistsLoading
   const error = userError || playlistError || topArtistsError
 
-  if (!token) {
-    history.push('/login')
-  }
+  // if (!token) {
+  //   history.push('/login')
+  // }
 
   return (
     <>

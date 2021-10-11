@@ -1,10 +1,6 @@
-import { useHistory, useParams } from 'react-router'
+import { useParams } from 'react-router'
 
-export const Playlist = ({ token }) => {
-  let history = useHistory()
+export const Playlist = () => {
   let { id } = useParams()
-  if (!token) {
-    history.push('/login')
-  }
   return <h1>Playlist n° {id}</h1>
 }

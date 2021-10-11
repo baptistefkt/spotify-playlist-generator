@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Route, Switch } from 'react-router'
+import { Redirect, Route, Switch } from 'react-router'
 import { useCookieState } from 'ahooks'
 import { Home } from './page/Home'
 import { Authorized } from './page/Authorized'
@@ -23,16 +23,20 @@ export const App = () => {
   return (
     <Switch>
       <Route exact={true} path="/">
-        <Home
-          token={token}
-          setToken={setToken}
-          userInfo={userInfo}
-          setUserInfo={setUserInfo}
-          playlists={playlists}
-          setPlaylists={setPlaylists}
-          topArtists={topArtists}
-          setTopArtists={setTopArtists}
-        />
+        {token ? (
+          <Home
+            token={token}
+            setToken={setToken}
+            userInfo={userInfo}
+            setUserInfo={setUserInfo}
+            playlists={playlists}
+            setPlaylists={setPlaylists}
+            topArtists={topArtists}
+            setTopArtists={setTopArtists}
+          />
+        ) : (
+          <Redirect to="/login" />
+        )}
       </Route>
       <Route path="/login">
         <Login />
@@ -41,17 +45,21 @@ export const App = () => {
         <Authorized setToken={setToken} />
       </Route>
       <Route path="/create-playlist">
-        <CreatePlaylist
-          token={token}
-          userId={userInfo?.id || ''}
-          topArtists={topArtists}
-        />
+        {token ? (
+          <CreatePlaylist
+            token={token}
+            userInfo={userInfo}
+            topArtists={topArtists}
+          />
+        ) : (
+          <Redirect to="/login" />
+        )}
       </Route>
       <Route exact={true} path="/playlist">
-        <Playlists token={token} />
+        {token ? <Playlists /> : <Redirect to="/login" />}
       </Route>
       <Route path="/playlist/:id">
-        <Playlist token={token} />
+        {token ? <Playlist /> : <Redirect to="/login" />}
       </Route>
       <Route path="/artists">
         <Artists token={token} />
