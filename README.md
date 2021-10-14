@@ -2,6 +2,13 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Website
+
+You can access the website at https://spotify-artist-playlist-generator.netlify.app (Work in progress!)
+The app will not work because Spotify require to register users manualy in the [Spotify dashboard](https://developer.spotify.com/dashboard/)
+If you're interessted in testing the app, just send me an email with your spotify user email address and name and I'll add you.
+
+
 ## Available Scripts
 
 In the project directory, you can run:
