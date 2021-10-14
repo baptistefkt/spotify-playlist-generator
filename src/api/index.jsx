@@ -3,13 +3,16 @@ import axios from 'axios'
 import shuffle from 'shuffle-array'
 import { getHeaders } from '../helpers'
 
-export const useGetUserInfo = (accessToken, setUserInfo) => {
-  const [userLoading, setUserLoading] = useState(false)
-  const [userError, setUserError] = useState(false)
+export const useGetUserInfo = (accessToken) => {
+  const [userInfo, setUserInfo] = useState({})
+  const [topArtists, setTopArtists] = useState([])
+  const [playlists, setPlaylists] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     if (!accessToken) return
-    setUserLoading(true)
+    setLoading(true)
 
     axios({
       url: 'https://api.spotify.com/v1/me',
@@ -17,66 +20,43 @@ export const useGetUserInfo = (accessToken, setUserInfo) => {
       headers: getHeaders(accessToken),
     })
       .then((res) => {
-        console.log(res.data)
         setUserInfo(res.data)
       })
-      .catch((err) => {
-        console.log(err)
-        setUserError(true)
+      .then(() => {
+        axios({
+          url: `https://api.spotify.com/v1/me/playlists`,
+          method: 'GET',
+          headers: getHeaders(accessToken),
+        })
+          .then((res) => {
+            setPlaylists(res.data.items)
+          })
+          .catch((err) => {
+            console.log(err)
+            setError(true)
+          })
       })
-      .finally(() => setUserLoading(false))
-  }, [accessToken])
-  return { userLoading, userError }
-}
-
-export const useGetPlaylists = (accessToken, setPlaylists) => {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
-
-  useEffect(() => {
-    if (!accessToken) return
-    setLoading(true)
-
-    axios({
-      url: `https://api.spotify.com/v1/me/playlists`,
-      method: 'GET',
-      headers: getHeaders(accessToken),
-    })
-      .then((res) => {
-        setPlaylists(res.data.items)
-      })
-      .catch((err) => {
-        console.log(err)
-        setError(true)
-      })
-      .finally(() => setLoading(false))
-  }, [accessToken])
-  return { playlistLoading: loading, playlistError: error }
-}
-
-export const useGetTopArtists = (accessToken, setTopArtists) => {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
-
-  useEffect(() => {
-    setLoading(true)
-
-    axios({
-      url: `https://api.spotify.com/v1/me/top/artists?time_range=long_term`,
-      method: 'GET',
-      headers: getHeaders(accessToken),
-    })
-      .then((res) => {
-        setTopArtists(res.data.items)
-        setLoading(false)
+      .then(() => {
+        axios({
+          url: `https://api.spotify.com/v1/me/top/artists?time_range=long_term`,
+          method: 'GET',
+          headers: getHeaders(accessToken),
+        })
+          .then((res) => {
+            setTopArtists(res.data.items)
+          })
+          .catch((err) => {
+            console.log(err)
+            setError(true)
+          })
       })
       .catch((err) => {
         console.log(err)
         setError(true)
       })
       .finally(() => setLoading(false))
-  }, [])
-  return { loading, error }
+  }, [accessToken])
+  return { userInfo, playlists, topArtists, loading, error }
 }
 
 export const useCreatePlaylist = (accessToken, userId, userCountry) => {
@@ -91,8 +71,6 @@ export const useCreatePlaylist = (accessToken, userId, userCountry) => {
       name,
       description,
     }
-
-    console.log(userId, postData)
 
     // create a empty playlist
     const playlist = await axios({

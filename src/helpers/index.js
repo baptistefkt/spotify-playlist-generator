@@ -10,7 +10,6 @@ export const getTokenFromLocationHash = () => {
       return initial
     }, {})
   window.location.hash = ''
-  console.log(hash)
   return hash.access_token
 }
 

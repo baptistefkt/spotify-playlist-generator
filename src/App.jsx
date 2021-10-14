@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 import { useCookieState } from 'ahooks'
 import { Home } from './page/Home'
@@ -10,29 +9,34 @@ import { Artists } from './page/Artists'
 import { NotFound } from './page/NotFound'
 import { CreatePlaylist } from './page/CreatePlaylist'
 import { ONE_HOUR } from './constants'
+import { useGetUserInfo } from './api'
 
 export const App = () => {
   const [token, setToken] = useCookieState('access-token', {
     expires: ONE_HOUR,
     defaultValue: '',
   })
-  const [userInfo, setUserInfo] = useState({})
-  const [playlists, setPlaylists] = useState([])
-  const [topArtists, setTopArtists] = useState([])
+
+  const { userInfo, playlists, topArtists, loading, error } =
+    useGetUserInfo(token)
+  // const { topArtists, topArtistsLoading, topArtistsError } =
+  //   useGetTopArtists(token)
+  // const { playlists, playlistsLoading, playlistsError } = useGetPlaylists(token)
+
+  // const pageLoading = userLoading || topArtistsLoading || playlistsLoading
+  // const pageError = userError || topArtistsError || playlistsError
 
   return (
     <Switch>
       <Route exact={true} path="/">
         {token ? (
           <Home
-            token={token}
             setToken={setToken}
             userInfo={userInfo}
-            setUserInfo={setUserInfo}
             playlists={playlists}
-            setPlaylists={setPlaylists}
             topArtists={topArtists}
-            setTopArtists={setTopArtists}
+            pageLoading={loading}
+            pageError={error}
           />
         ) : (
           <Redirect to="/login" />
@@ -50,6 +54,8 @@ export const App = () => {
             token={token}
             userInfo={userInfo}
             topArtists={topArtists}
+            pageLoading={loading}
+            pageError={error}
           />
         ) : (
           <Redirect to="/login" />
