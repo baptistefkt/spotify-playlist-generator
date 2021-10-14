@@ -19,12 +19,6 @@ export const App = () => {
 
   const { userInfo, playlists, topArtists, loading, error } =
     useGetUserInfo(token)
-  // const { topArtists, topArtistsLoading, topArtistsError } =
-  //   useGetTopArtists(token)
-  // const { playlists, playlistsLoading, playlistsError } = useGetPlaylists(token)
-
-  // const pageLoading = userLoading || topArtistsLoading || playlistsLoading
-  // const pageError = userError || topArtistsError || playlistsError
 
   return (
     <Switch>
