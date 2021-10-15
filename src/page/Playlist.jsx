@@ -49,7 +49,13 @@ export const Playlist = () => {
           </LoaderContainer>
         )}
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
-          <Button>Play on spotify</Button>
+          <a
+            href={`https://open.spotify.com/playlist/${id}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button>Play on spotify</Button>
+          </a>
         </div>
       </div>
     </Container>
