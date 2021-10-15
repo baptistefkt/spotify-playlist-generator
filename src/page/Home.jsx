@@ -131,6 +131,9 @@ export const Home = ({
   pageLoading,
   pageError,
 }) => {
+  console.log(userInfo)
+  const userImgSrc =
+    userInfo?.images?.length > 0 ? userInfo.images[0].url : placeholderImg
   return (
     <>
       {pageLoading && <Loader />}
@@ -144,7 +147,7 @@ export const Home = ({
           </AlignRight>
           <UserInfoContainer>
             <AvatarContainer>
-              <img src={userInfo.images ? userInfo?.images[0].url : ''} />
+              <img src={userImgSrc} />
             </AvatarContainer>
             <h1>{userInfo?.display_name}</h1>
             <Link to="/create-playlist">
