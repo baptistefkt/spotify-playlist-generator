@@ -21,6 +21,8 @@ const StyledFrom = styled.form`
   }
 
   h2 {
+    display: flex;
+    justify-content: space-between;
     span {
       font-size: 16px;
       font-weight: 400;
@@ -60,7 +62,7 @@ const StyledNameInput = styled.input`
   border: 0;
   border-radius: 4px;
   font-size: 30px;
-  min-width: 850px;
+  min-width: 600px;
   font-weight: 900;
   letter-spacing: -0.04em;
   padding: 8px 24px;
@@ -79,7 +81,7 @@ const StyledDescription = styled.textarea`
   border: 0;
   border-radius: 4px;
   font-size: 18px;
-  min-width: 850px;
+  min-width: 600px;
   height: 103px;
   font-weight: 400;
   letter-spacing: -0.04em;
@@ -180,17 +182,18 @@ const SearchAndResult = styled.div``
 
 const TokenContainer = styled.div`
   min-height: 111px;
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: rgba(255, 255, 255, 0.05);
   border-radius: 4px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   padding: 4px;
+  ${(props) => props.error && 'border-bottom: 1px solid red'}
 `
 
 const ArtistToken = styled.span`
   display: inline-block;
   padding: 6px 10px;
   margin: 4px 4px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.3);
   color: rgba(255, 255, 255, 0.7);
   border-radius: 25px;
   font-size: 11px;
@@ -206,9 +209,11 @@ const ArtistToken = styled.span`
 `
 
 const StyledSelectedCount = styled.div`
-  text-align: right;
-  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 32px;
   font-size: 14px;
+  ${(props) => props.error && 'color: red;'}
 `
 
 const RadioContainer = styled.div`
@@ -313,6 +318,19 @@ export const CreatePlaylist = ({
     setSelectedArtists((old) => old.filter((el) => el.id !== i.id))
   }
 
+  const tooManyArtists = selectedArtists.length > 10
+
+  const handleCreateClick = () => {
+    if (!tooManyArtists) {
+      createPlaylist(
+        name || 'Playlist generated via Artist Playlist Generator',
+        description,
+        artistsIds,
+        tracksType
+      )
+    }
+  }
+
   return (
     <Main>
       {response ? (
@@ -324,7 +342,7 @@ export const CreatePlaylist = ({
         </>
       ) : (
         <>
-          <StyledFrom>
+          <StyledFrom onSubmit={(e) => e.preventDefault()}>
             <FlexContainer>
               <UploadImgContainer>
                 <img src={placeholderImg} alt="upload placeholder image" />
@@ -347,7 +365,7 @@ export const CreatePlaylist = ({
                   <StyledDescription
                     name="playlistDescription"
                     id="playlistDescription"
-                    placeholder="Add a description (optional)"
+                    placeholder="Add an optional description"
                     rows="3"
                     maxLength="300"
                     value={description}
@@ -411,17 +429,15 @@ export const CreatePlaylist = ({
                 </SearchAndResult>
               </div>
               <div>
-                <h2
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
-                >
-                  Selected{' '}
+                <h2>
+                  Selected
                   <span
                     onClick={() => setSelectedArtists(topArtists?.slice(0, 10))}
                   >
                     select my top 10 artists
                   </span>
                 </h2>
-                <TokenContainer>
+                <TokenContainer error={tooManyArtists}>
                   {selectedArtists.map((i) => (
                     <ArtistToken key={`selected-${i.id}`}>
                       {i.name}
@@ -432,7 +448,10 @@ export const CreatePlaylist = ({
                     </ArtistToken>
                   ))}
                 </TokenContainer>
-                <StyledSelectedCount>{`${selectedArtists.length}/10`}</StyledSelectedCount>
+                <StyledSelectedCount error={tooManyArtists}>
+                  <span>{`${selectedArtists.length}/10`}</span>
+                  <span>{tooManyArtists && 'Select maximum 10 artists'}</span>
+                </StyledSelectedCount>
                 <RadioContainer>
                   <div>
                     <FakeRadio
@@ -465,19 +484,7 @@ export const CreatePlaylist = ({
                     <label htmlFor="all">All tracks</label>
                   </div>
                 </RadioContainer>
-                <Button
-                  onClick={() =>
-                    createPlaylist(
-                      name ||
-                        'Playlist generated via Artist Playlist Generator',
-                      description,
-                      artistsIds,
-                      tracksType
-                    )
-                  }
-                >
-                  Generate playlist
-                </Button>
+                <Button onClick={handleCreateClick}>Generate playlist</Button>
               </div>
             </BottomSection>
           </StyledFrom>
