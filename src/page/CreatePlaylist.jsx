@@ -2,10 +2,10 @@ import { useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import axios from 'axios'
-import { Search, Close } from '@styled-icons/zondicons'
+import { Search, Close, CheckmarkOutline } from '@styled-icons/zondicons'
 
 import { useCreatePlaylist } from '../api'
-import { Button, Main, theme } from '../styles'
+import { Button, Main, SecondaryButton, theme } from '../styles'
 import placeholderImg from '../assets/uploadPlaceholder.png'
 import { Loader } from '../components/Loader'
 
@@ -245,6 +245,19 @@ const FakeRadio = styled.span`
   ${(props) => props.selected && 'border: 4px solid white;'}
 `
 
+const SuccessContainer = styled.section`
+  width: fit-content;
+  margin: 0 auto;
+  margin-top: 25vh;
+  text-align: center;
+  h1 {
+    margin-bottom: 32px;
+    span {
+      margin-right: 16px;
+    }
+  }
+`
+
 export const CreatePlaylist = ({
   token,
   userInfo,
@@ -334,12 +347,19 @@ export const CreatePlaylist = ({
   return (
     <Main>
       {response ? (
-        <>
-          <div>Your playlist has been successfuly created</div>
-          <button onClick={() => history.push(`/playlist/${response.id}`)}>
+        <SuccessContainer>
+          <h1>
+            <span>
+              <CheckmarkOutline size="40px" />
+            </span>
+            Your playlist has been successfuly created
+          </h1>
+          <SecondaryButton
+            onClick={() => history.push(`/playlist/${response.id}`)}
+          >
             View my playlist
-          </button>
-        </>
+          </SecondaryButton>
+        </SuccessContainer>
       ) : (
         <>
           <StyledFrom onSubmit={(e) => e.preventDefault()}>
