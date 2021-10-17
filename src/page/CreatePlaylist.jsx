@@ -8,6 +8,7 @@ import { useCreatePlaylist } from '../api'
 import { Button, Main, SecondaryButton, theme } from '../styles'
 import placeholderImg from '../assets/uploadPlaceholder.png'
 import { Loader } from '../components/Loader'
+import { ErrorPage } from './ErrorPage'
 
 // style
 const StyledFrom = styled.form`
@@ -260,6 +261,7 @@ const SuccessContainer = styled.section`
 
 export const CreatePlaylist = ({
   token,
+  setToken,
   userInfo,
   topArtists,
   pageLoading,
@@ -291,7 +293,7 @@ export const CreatePlaylist = ({
   }
 
   if (error || pageError) {
-    return <div>Oops, something went wrong...</div>
+    return <ErrorPage logout={error} setToken={setToken} />
   }
 
   const myHeader = {

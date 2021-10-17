@@ -46,6 +46,7 @@ export const App = () => {
         {token ? (
           <CreatePlaylist
             token={token}
+            setToken={setToken}
             userInfo={userInfo}
             topArtists={topArtists}
             pageLoading={loading}

@@ -4,6 +4,7 @@ import { Loader } from '../components/Loader'
 import { Button, mixins, SecondaryButton, theme } from '../styles'
 import Main from '../styles/main'
 import placeholderImg from '../assets/placeholderImg.png'
+import { ErrorPage } from './ErrorPage'
 
 // Home style
 const UserInfoContainer = styled.div`
@@ -137,7 +138,7 @@ export const Home = ({
   return (
     <>
       {pageLoading && <Loader />}
-      {pageError && <div>Oops, something went wrong...</div>}
+      {pageError && <ErrorPage />}
       {!pageLoading && !pageError && (
         <Main>
           <AlignRight>
