@@ -167,7 +167,7 @@ export const useCreatePlaylist = (accessToken, userId, userCountry) => {
         uris:
           tracksType === 'top' ? await getTopTracks() : await getAlltracks(),
       },
-    }).then((res) => console.log(res.data))
+    })
 
     setLoading(false)
   }

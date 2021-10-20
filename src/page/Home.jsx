@@ -132,7 +132,6 @@ export const Home = ({
   pageLoading,
   pageError,
 }) => {
-  console.log(userInfo)
   const userImgSrc =
     userInfo?.images?.length > 0 ? userInfo.images[0].url : placeholderImg
   return (
