@@ -17,6 +17,9 @@ const Main = styled.main`
   ${media.phablet`
     padding: 30px 25px;
   `};
+  ${media.phone`
+    padding: 30px 12px;
+  `};
   h2 {
     ${media.tablet`
       text-align: center;

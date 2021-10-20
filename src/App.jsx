@@ -17,7 +17,7 @@ const offsetNav = css`
   padding-left: ${theme.navWidth};
   ${media.tablet`
     padding-left: 0;
-    padding-bottom: 50px;
+    padding-bottom: 100px;
   `};
 `
 const SiteWrapper = styled.div`

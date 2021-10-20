@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import placeholderImg from '../assets/uploadPlaceholder.png'
-import { theme } from '../styles'
+import { theme, media } from '../styles'
 
 const FlexContainer = styled.div`
   display: flex;
@@ -20,7 +20,19 @@ const UploadImgContainer = styled.div`
   img {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
   }
+
+  ${media.tablet`
+    display: none;
+  `};
+`
+
+const inputWidth = css`
+  width: 500px;
+  ${media.tablet`
+    width: 100%;
+  `};
 `
 
 const StyledNameInput = styled.input`
@@ -31,7 +43,6 @@ const StyledNameInput = styled.input`
   border: 0;
   border-radius: 4px;
   font-size: 30px;
-  min-width: 600px;
   font-weight: 900;
   letter-spacing: -0.04em;
   padding: 8px 24px;
@@ -40,6 +51,7 @@ const StyledNameInput = styled.input`
     background-color: rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.7);
   }
+  ${inputWidth}
 `
 
 const StyledDescription = styled.textarea`
@@ -50,7 +62,6 @@ const StyledDescription = styled.textarea`
   border: 0;
   border-radius: 4px;
   font-size: 18px;
-  min-width: 600px;
   height: 103px;
   font-weight: 400;
   letter-spacing: -0.04em;
@@ -63,6 +74,7 @@ const StyledDescription = styled.textarea`
     background-color: rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.7);
   }
+  ${inputWidth}
 `
 
 const PlaylistInfoNonMemo = ({

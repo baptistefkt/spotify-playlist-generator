@@ -5,11 +5,16 @@ import { Search } from '@styled-icons/zondicons'
 
 import { Loader } from './Loader'
 import placeholderImg from '../assets/uploadPlaceholder.png'
-import { theme } from '../styles'
+import { theme, media } from '../styles'
 
 const StyledSearchContainer = styled.div`
   position: relative;
-  width: fit-content;
+  width: 370px;
+
+  ${media.tablet`
+    width: 100%;
+  `};
+
   > span {
     position: absolute;
     top: 4px;
@@ -25,7 +30,7 @@ const StyledSearchInput = styled.input`
   border: 0;
   border-radius: 4px;
   font-size: 18px;
-  min-width: 370px;
+  width: 100%;
   height: 40px;
   padding: 8px 8px 8px 32px;
   caret-color: rgba(255, 255, 255, 0.7);
@@ -44,6 +49,7 @@ const SearchIcon = styled(Search)`
 
 const StyledResultsContainer = styled.div`
   margin-top: 16px;
+
   > div {
     display: flex;
     align-items: center;
@@ -55,6 +61,7 @@ const StyledResultsContainer = styled.div`
       background-color: rgba(255, 255, 255, 0.1);
     }
   }
+
   span {
     text-transform: uppercase;
     font-size: 14px;
@@ -66,6 +73,7 @@ const ArtistImgContainer = styled.div`
   width: 40px;
   height: 40px;
   margin-right: 20px;
+
   img {
     border-radius: 100%;
     width: 40px;

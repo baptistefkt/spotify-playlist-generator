@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Loader } from '../components/Loader'
-import { Button, mixins, SecondaryButton, theme } from '../styles'
-import Main from '../styles/main'
+import { Button, mixins, SecondaryButton, theme, Main, media } from '../styles'
 import placeholderImg from '../assets/placeholderImg.png'
 import { ErrorPage } from './ErrorPage'
 
@@ -17,6 +16,7 @@ const UserInfoContainer = styled.div`
     margin: 20px 0 60px;
   }
 `
+
 const AvatarContainer = styled.div`
   width: 150px;
   height: 150px;
@@ -30,13 +30,20 @@ const AvatarContainer = styled.div`
 
 const AlignRight = styled.div`
   text-align: right;
+  margin-bottom: 24px;
 `
+
 const FlexContainer = styled.section`
   display: flex;
   gap: 200px;
   > div {
     flex: 1;
   }
+
+  ${media.tablet`
+    flex-direction: column;
+    gap: 80px;
+  `};
 `
 
 const StyledLink = styled(Link)`
@@ -51,6 +58,10 @@ const PlaylistItem = styled.li`
   border: 1px solid transparent;
   cursor: pointer;
   border-radius: 4px;
+
+  ${media.phone`
+    padding: 8px 4px;
+  `};
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
@@ -78,6 +89,12 @@ const PlaylistNameAndDesc = styled.div`
     margin-bottom: 4px;
     max-width: 280px;
     ${mixins.overflowEllipsis}
+    ${media.thone`
+      max-width: 180px;
+    `};
+    ${media.tiny`
+      max-width: 120px;
+    `};
   }
   span {
     display: inline-block;
@@ -85,6 +102,12 @@ const PlaylistNameAndDesc = styled.div`
     color: ${theme.colors.lightestGrey};
     max-width: 250px;
     ${mixins.overflowEllipsis}
+    ${media.thone`
+      max-width: 150px;
+    `};
+    ${media.tiny`
+      max-width: 90px;
+    `};
   }
 `
 

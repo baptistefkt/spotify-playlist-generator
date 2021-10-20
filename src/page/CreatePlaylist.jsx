@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 import { useCreatePlaylist } from '../api'
-import { Button, Main } from '../styles'
+import { Button, Main, media } from '../styles'
 import { Loader } from '../components/Loader'
 import { ErrorPage } from './ErrorPage'
 import { PlaylistCreated } from '../components/PlaylistCreated'
@@ -44,6 +44,9 @@ const BottomSection = styled.section`
   > div {
     flex: 1;
   }
+  ${media.tablet`
+    flex-direction: column;
+  `};
 `
 
 export const CreatePlaylist = ({
