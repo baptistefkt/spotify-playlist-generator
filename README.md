@@ -2,6 +2,8 @@
 
 # Spotify Playlist Generator 
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/0a5fcc02-0524-40b9-a2ed-34383e40f34a/deploy-status)](https://app.netlify.com/sites/spotify-artist-playlist-generator/deploys)
+
 You can access the web app at https://spotify-artist-playlist-generator.netlify.app (Work in progress!)
 
 The app will not work because Spotify require to register users manualy in the [Spotify dashboard](https://developer.spotify.com/dashboard/)
