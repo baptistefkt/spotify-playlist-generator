@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { useParams } from 'react-router'
 import { Audio } from 'svg-loaders-react'
-import { Button, Main, theme } from '../styles'
+import { Button, Main, theme, media } from '../styles'
 
 const Container = styled(Main)`
   display: flex;
@@ -11,6 +11,9 @@ const Container = styled(Main)`
   > div {
     width: 50%;
     margin: 0 auto;
+    ${media.phablet`
+      width: 90%;
+    `};
   }
 `
 
