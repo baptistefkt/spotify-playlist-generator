@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Redirect, Route, Switch } from 'react-router'
-import styled from 'styled-components'
+import { Redirect, Route, Switch, useLocation } from 'react-router'
+import styled, { css } from 'styled-components'
 import { Home } from './page/Home'
 import { Authorized } from './page/Authorized'
 import { Login } from './page/Login'
@@ -13,24 +13,29 @@ import { useGetUserInfo } from './api'
 import { Nav } from './components/Nav'
 import { theme, media } from './styles'
 
-const SiteWrapper = styled.div`
+const offsetNav = css`
   padding-left: ${theme.navWidth};
   ${media.tablet`
     padding-left: 0;
     padding-bottom: 50px;
   `};
 `
+const SiteWrapper = styled.div`
+  ${({ offset }) => offset && offsetNav}
+`
 
 export const App = () => {
   const [token, setToken] = useState('')
+  let location = useLocation()
+  const isLoginPage = location.pathname === '/login'
 
   const { userInfo, playlists, topArtists, loading, error, setLastFetchedAt } =
     useGetUserInfo(token)
 
   return (
     <>
-      <Nav />
-      <SiteWrapper>
+      {!isLoginPage && <Nav />}
+      <SiteWrapper offset={!isLoginPage}>
         <Switch>
           <Route exact={true} path="/">
             {token ? (
@@ -46,13 +51,13 @@ export const App = () => {
               <Redirect to="/login" />
             )}
           </Route>
-          <Route path="/login">
+          <Route exact={true} path="/login">
             <Login />
           </Route>
-          <Route path="/authorized">
+          <Route exact={true} path="/authorized">
             <Authorized setToken={setToken} />
           </Route>
-          <Route path="/create-playlist">
+          <Route exact={true} path="/create-playlist">
             {token ? (
               <CreatePlaylist
                 token={token}
