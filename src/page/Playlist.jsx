@@ -2,14 +2,12 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { useParams } from 'react-router'
 import { Audio } from 'svg-loaders-react'
-import { Button, theme } from '../styles'
+import { Button, Main, theme } from '../styles'
 
-const Container = styled.section`
+const Container = styled(Main)`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
   > div {
     width: 50%;
     margin: 0 auto;

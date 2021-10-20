@@ -1,14 +1,14 @@
 import { useRef, useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import axios from 'axios'
-import { Search, Close, CheckmarkOutline } from '@styled-icons/zondicons'
+import { Search, Close } from '@styled-icons/zondicons'
 
 import { useCreatePlaylist } from '../api'
-import { Button, Main, SecondaryButton, theme } from '../styles'
+import { Button, Main, theme } from '../styles'
 import placeholderImg from '../assets/uploadPlaceholder.png'
 import { Loader } from '../components/Loader'
 import { ErrorPage } from './ErrorPage'
+import { PlaylistCreated } from '../components/PlaylistCreated'
 
 // style
 const StyledFrom = styled.form`
@@ -246,19 +246,6 @@ const FakeRadio = styled.span`
   ${(props) => props.selected && 'border: 4px solid white;'}
 `
 
-const SuccessContainer = styled.section`
-  width: fit-content;
-  margin: 0 auto;
-  margin-top: 25vh;
-  text-align: center;
-  h1 {
-    margin-bottom: 32px;
-    span {
-      margin-right: 16px;
-    }
-  }
-`
-
 export const CreatePlaylist = ({
   token,
   setToken,
@@ -266,6 +253,7 @@ export const CreatePlaylist = ({
   topArtists,
   pageLoading,
   pageError,
+  setLastFetchedAt,
 }) => {
   const [searchInput, setSearchInput] = useState('')
   const [result, setResult] = useState([])
@@ -278,14 +266,13 @@ export const CreatePlaylist = ({
     ? selectedArtists.map((i) => i.id)
     : topArtists?.map((i) => i.id).slice(0, 10)
 
-  let history = useHistory()
-
   const searchRef = useRef(null)
 
   const { createPlaylist, response, loading, error } = useCreatePlaylist(
     token,
     userInfo.id,
-    userInfo.country
+    userInfo.country,
+    setLastFetchedAt
   )
 
   if (loading || pageLoading) {
@@ -349,19 +336,7 @@ export const CreatePlaylist = ({
   return (
     <Main>
       {response ? (
-        <SuccessContainer>
-          <h1>
-            <span>
-              <CheckmarkOutline size="40px" />
-            </span>
-            Your playlist has been successfuly created
-          </h1>
-          <SecondaryButton
-            onClick={() => history.push(`/playlist/${response.id}`)}
-          >
-            View my playlist
-          </SecondaryButton>
-        </SuccessContainer>
+        <PlaylistCreated playlistId={response.id} />
       ) : (
         <>
           <StyledFrom onSubmit={(e) => e.preventDefault()}>

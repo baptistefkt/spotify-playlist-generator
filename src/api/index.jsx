@@ -9,6 +9,7 @@ export const useGetUserInfo = (accessToken) => {
   const [playlists, setPlaylists] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const [lastFetchedAt, setLastFetchedAt] = useState(Date.now())
 
   useEffect(() => {
     if (!accessToken) return
@@ -55,11 +56,16 @@ export const useGetUserInfo = (accessToken) => {
         setError(true)
       })
       .finally(() => setLoading(false))
-  }, [accessToken])
-  return { userInfo, playlists, topArtists, loading, error }
+  }, [accessToken, lastFetchedAt])
+  return { userInfo, playlists, topArtists, loading, error, setLastFetchedAt }
 }
 
-export const useCreatePlaylist = (accessToken, userId, userCountry) => {
+export const useCreatePlaylist = (
+  accessToken,
+  userId,
+  userCountry,
+  setLastFetchedAt
+) => {
   const [response, setResponse] = useState()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
@@ -124,7 +130,6 @@ export const useCreatePlaylist = (accessToken, userId, userCountry) => {
       for (let tracksCall of tracksCalls) {
         allTracksIds.push(
           await Promise.all(tracksCall).then((responses) => {
-            console.log(responses)
             return responses.map((res) =>
               res.filter((r) => r.is_playable === true).map((r) => r.uri)
             )
@@ -138,6 +143,7 @@ export const useCreatePlaylist = (accessToken, userId, userCountry) => {
 
       return sortedTracksIds
     }
+
     const getTopTracks = async () => {
       // get top tracks ids from artists
       const calls = await artistIds.map((id) =>
@@ -168,7 +174,7 @@ export const useCreatePlaylist = (accessToken, userId, userCountry) => {
           tracksType === 'top' ? await getTopTracks() : await getAlltracks(),
       },
     })
-
+    setLastFetchedAt(Date.now())
     setLoading(false)
   }
 

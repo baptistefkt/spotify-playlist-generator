@@ -1,6 +1,6 @@
+import { useState } from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 import styled from 'styled-components'
-import { useCookieState } from 'ahooks'
 import { Home } from './page/Home'
 import { Authorized } from './page/Authorized'
 import { Login } from './page/Login'
@@ -9,27 +9,23 @@ import { Playlist } from './page/Playlist'
 import { Artists } from './page/Artists'
 import { NotFound } from './page/NotFound'
 import { CreatePlaylist } from './page/CreatePlaylist'
-import { ONE_HOUR } from './constants'
 import { useGetUserInfo } from './api'
 import { Nav } from './components/Nav'
 import { theme, media } from './styles'
 
-export const App = () => {
-  const [token, setToken] = useCookieState('access-token', {
-    expires: ONE_HOUR,
-    defaultValue: '',
-  })
-
-  const { userInfo, playlists, topArtists, loading, error } =
-    useGetUserInfo(token)
-
-  const SiteWrapper = styled.div`
-    padding-left: ${theme.navWidth};
-    ${media.tablet`
+const SiteWrapper = styled.div`
+  padding-left: ${theme.navWidth};
+  ${media.tablet`
     padding-left: 0;
     padding-bottom: 50px;
   `};
-  `
+`
+
+export const App = () => {
+  const [token, setToken] = useState('')
+
+  const { userInfo, playlists, topArtists, loading, error, setLastFetchedAt } =
+    useGetUserInfo(token)
 
   return (
     <>
@@ -65,6 +61,7 @@ export const App = () => {
                 topArtists={topArtists}
                 pageLoading={loading}
                 pageError={error}
+                setLastFetchedAt={setLastFetchedAt}
               />
             ) : (
               <Redirect to="/login" />

@@ -141,7 +141,7 @@ export const Home = ({
       {!pageLoading && !pageError && (
         <Main>
           <AlignRight>
-            <SecondaryButton onClick={() => setToken(null)}>
+            <SecondaryButton onClick={() => setToken('')}>
               LOGOUT
             </SecondaryButton>
           </AlignRight>

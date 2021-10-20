@@ -29,7 +29,7 @@ export const ErrorPage = ({ logout = false, setToken }) => (
       <h2>Something went wrong...</h2>
       {logout ? (
         <div>
-          Let&#39;s <span onClick={() => setToken(null)}>try again</span>
+          Let&#39;s <span onClick={() => setToken('')}>try again</span>
         </div>
       ) : (
         <div>
