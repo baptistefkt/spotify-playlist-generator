@@ -16,7 +16,7 @@ const UploadImgContainer = styled.div`
   width: 232px;
   height: 232px;
   vertical-align: middle;
-  margin-right: 25px;
+  margin-right: 40px;
   img {
     width: 100%;
     height: 100%;

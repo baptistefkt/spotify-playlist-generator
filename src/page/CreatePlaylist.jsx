@@ -85,6 +85,9 @@ export const CreatePlaylist = ({
   const tooManyArtists = selectedArtists.length > 10
 
   const handleCreateClick = () => {
+    if (selectedArtists.length === 0) {
+      return alert('You need to select at least 1 artist')
+    }
     if (!tooManyArtists) {
       createPlaylist(
         name || 'Playlist generated via Artist Playlist Generator',
