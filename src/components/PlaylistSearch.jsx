@@ -131,7 +131,10 @@ const PlaylistSearchNonMemo = ({
           setResult(res.data.artists.items)
           setSearchLoading(false)
         })
-        .catch((err) => setError(err.response.data.error))
+        .catch((err) => {
+          setSearchLoading(false)
+          setError(err.response.data.error)
+        })
     } else {
       setResult([])
     }

@@ -74,9 +74,11 @@ export const useCreatePlaylist = (
         )
       )
 
-      const data = await Promise.all(calls).catch((err) =>
+      const data = await Promise.all(calls).catch((err) => {
+        setLoading(false)
         setError(err.response.data.error)
-      )
+      })
+
       const albumsIds = data
         .map((d) => d.data.items)
         .map((a) => {
@@ -106,7 +108,10 @@ export const useCreatePlaylist = (
                 res.filter((r) => r.is_playable === true).map((r) => r.uri)
               )
             })
-            .catch((err) => setError(err.response.data.error))
+            .catch((err) => {
+              setLoading(false)
+              setError(err.response.data.error)
+            })
         )
       }
 
@@ -132,7 +137,10 @@ export const useCreatePlaylist = (
         .then((data) => {
           return data.flatMap((i) => i.data.tracks).map((i) => i.uri)
         })
-        .catch((err) => setError(err.response.data.error))
+        .catch((err) => {
+          setLoading(false)
+          setError(err.response.data.error)
+        })
 
       return tracksIds
     }
@@ -148,7 +156,10 @@ export const useCreatePlaylist = (
         setResponse(res.data)
         return res.data
       })
-      .catch((err) => setError(err.response.data.error))
+      .catch((err) => {
+        setLoading(false)
+        setError(err.response.data.error)
+      })
 
     // add tracks to playlist
     await axios({
@@ -159,7 +170,10 @@ export const useCreatePlaylist = (
         uris:
           tracksType === 'top' ? await getTopTracks() : await getAlltracks(),
       },
-    }).catch((err) => setError(err.response.data.error))
+    }).catch((err) => {
+      setLoading(false)
+      setError(err.response.data.error)
+    })
     setLastFetchedAt(Date.now())
     setLoading(false)
   }

@@ -7,6 +7,14 @@ const PageContainer = styled(Main)`
   display: flex;
   justify-content: center;
   align-items: center;
+  > div {
+    text-align: center;
+    h1 {
+      font-size: 40px;
+      line-height: 50px;
+      margin-bottom: 50px;
+    }
+  }
 `
 
 const state = generateRandomString(16)
@@ -15,9 +23,14 @@ const href = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&
 export const Login = () => {
   return (
     <PageContainer>
-      <a href={href}>
-        <Button>LOG IN TO SPOTIFY</Button>
-      </a>
+      <div>
+        <h1>
+          Generate playlists in no time <br /> by associating artists
+        </h1>
+        <a href={href}>
+          <Button>LOG IN TO SPOTIFY</Button>
+        </a>
+      </div>
     </PageContainer>
   )
 }
