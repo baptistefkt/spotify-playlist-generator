@@ -154,7 +154,7 @@ const PlaylistSearchNonMemo = ({
             id="spotifySearchInput"
             value={searchInput}
             onChange={searchSpotify}
-            onFocus={(e) => e.currentTarget.scrollIntoView()}
+            onBeforeInput={(e) => e.currentTarget.scrollIntoView()}
             ref={searchRef}
           />
           <SearchIcon size="14px" />

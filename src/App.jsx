@@ -21,7 +21,7 @@ const offsetNav = css`
   `};
 `
 const SiteWrapper = styled.div`
-  ${({ offset }) => offset && offsetNav}
+  ${({ show }) => show && offsetNav}
 `
 
 export const App = () => {
@@ -35,7 +35,7 @@ export const App = () => {
   return (
     <>
       {!isLoginPage && <Nav />}
-      <SiteWrapper offset={!isLoginPage}>
+      <SiteWrapper show={!isLoginPage}>
         <Switch>
           <Route exact={true} path="/">
             {token ? (
