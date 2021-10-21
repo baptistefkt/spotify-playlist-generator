@@ -15,9 +15,9 @@ const href = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&
 export const Login = () => {
   return (
     <PageContainer>
-      <Button>
-        <a href={href}>LOG IN TO SPOTIFY</a>
-      </Button>
+      <a href={href}>
+        <Button>LOG IN TO SPOTIFY</Button>
+      </a>
     </PageContainer>
   )
 }

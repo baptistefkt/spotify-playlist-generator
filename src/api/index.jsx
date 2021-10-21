@@ -3,12 +3,11 @@ import axios from 'axios'
 import shuffle from 'shuffle-array'
 import { getHeaders } from '../helpers'
 
-export const useGetUserInfo = (accessToken) => {
+export const useGetUserInfo = (accessToken, setError) => {
   const [userInfo, setUserInfo] = useState({})
   const [topArtists, setTopArtists] = useState([])
   const [playlists, setPlaylists] = useState([])
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
   const [lastFetchedAt, setLastFetchedAt] = useState(Date.now())
 
   useEffect(() => {
@@ -32,10 +31,7 @@ export const useGetUserInfo = (accessToken) => {
           .then((res) => {
             setPlaylists(res.data.items)
           })
-          .catch((err) => {
-            console.log(err)
-            setError(true)
-          })
+          .catch((err) => setError(err.response.data.error))
       })
       .then(() => {
         axios({
@@ -46,53 +42,26 @@ export const useGetUserInfo = (accessToken) => {
           .then((res) => {
             setTopArtists(res.data.items)
           })
-          .catch((err) => {
-            console.log(err)
-            setError(true)
-          })
+          .catch((err) => setError(err.response.data.error))
       })
-      .catch((err) => {
-        console.log(err)
-        setError(true)
-      })
+      .catch((err) => setError(err.response.data.error))
       .finally(() => setLoading(false))
   }, [accessToken, lastFetchedAt])
-  return { userInfo, playlists, topArtists, loading, error, setLastFetchedAt }
+  return { userInfo, playlists, topArtists, loading, setLastFetchedAt }
 }
 
 export const useCreatePlaylist = (
   accessToken,
   userId,
   userCountry,
+  setError,
   setLastFetchedAt
 ) => {
   const [response, setResponse] = useState()
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
 
   const createPlaylist = async (name, description, artistIds, tracksType) => {
     setLoading(true)
-
-    const postData = {
-      name,
-      description,
-    }
-
-    // create a empty playlist
-    const playlist = await axios({
-      url: `https://api.spotify.com/v1/users/${userId}/playlists`,
-      method: 'POST',
-      headers: getHeaders(accessToken),
-      data: postData,
-    })
-      .then((res) => {
-        setResponse(res.data)
-        return res.data
-      })
-      .catch((err) => {
-        console.log(err)
-        setError(true)
-      })
 
     const getAlltracks = async () => {
       // get albums from artists
@@ -105,7 +74,9 @@ export const useCreatePlaylist = (
         )
       )
 
-      const data = await Promise.all(calls)
+      const data = await Promise.all(calls).catch((err) =>
+        setError(err.response.data.error)
+      )
       const albumsIds = data
         .map((d) => d.data.items)
         .map((a) => {
@@ -129,11 +100,13 @@ export const useCreatePlaylist = (
       let allTracksIds = []
       for (let tracksCall of tracksCalls) {
         allTracksIds.push(
-          await Promise.all(tracksCall).then((responses) => {
-            return responses.map((res) =>
-              res.filter((r) => r.is_playable === true).map((r) => r.uri)
-            )
-          })
+          await Promise.all(tracksCall)
+            .then((responses) => {
+              return responses.map((res) =>
+                res.filter((r) => r.is_playable === true).map((r) => r.uri)
+              )
+            })
+            .catch((err) => setError(err.response.data.error))
         )
       }
 
@@ -159,10 +132,23 @@ export const useCreatePlaylist = (
         .then((data) => {
           return data.flatMap((i) => i.data.tracks).map((i) => i.uri)
         })
-        .catch((err) => console.log(err))
+        .catch((err) => setError(err.response.data.error))
 
       return tracksIds
     }
+
+    // create a empty playlist
+    const playlist = await axios({
+      url: `https://api.spotify.com/v1/users/${userId}/playlists`,
+      method: 'POST',
+      headers: getHeaders(accessToken),
+      data: { name, description },
+    })
+      .then((res) => {
+        setResponse(res.data)
+        return res.data
+      })
+      .catch((err) => setError(err.response.data.error))
 
     // add tracks to playlist
     await axios({
@@ -173,10 +159,10 @@ export const useCreatePlaylist = (
         uris:
           tracksType === 'top' ? await getTopTracks() : await getAlltracks(),
       },
-    })
+    }).catch((err) => setError(err.response.data.error))
     setLastFetchedAt(Date.now())
     setLoading(false)
   }
 
-  return { createPlaylist, response, loading, error }
+  return { createPlaylist, response, loading }
 }

@@ -153,15 +153,15 @@ export const Home = ({
   playlists,
   topArtists,
   pageLoading,
-  pageError,
+  error,
 }) => {
   const userImgSrc =
     userInfo?.images?.length > 0 ? userInfo.images[0].url : placeholderImg
   return (
     <>
       {pageLoading && <Loader />}
-      {pageError && <ErrorPage />}
-      {!pageLoading && !pageError && (
+      {error && <ErrorPage error={error} setToken={setToken} />}
+      {!pageLoading && !error && (
         <Main>
           <AlignRight>
             <SecondaryButton onClick={() => setToken('')}>

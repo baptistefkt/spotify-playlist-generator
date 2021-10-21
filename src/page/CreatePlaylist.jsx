@@ -55,7 +55,8 @@ export const CreatePlaylist = ({
   userInfo,
   topArtists,
   pageLoading,
-  pageError,
+  error,
+  setError,
   setLastFetchedAt,
 }) => {
   const [searchInput, setSearchInput] = useState('')
@@ -67,10 +68,13 @@ export const CreatePlaylist = ({
   const [selectedArtists, setSelectedArtists] = useState([])
   const artistsIds = selectedArtists.map((i) => i.id)
 
-  const { createPlaylist, response, loading, error } = useCreatePlaylist(
+  const { country, id } = userInfo
+
+  const { createPlaylist, response, loading } = useCreatePlaylist(
     token,
-    userInfo.id,
-    userInfo.country,
+    id,
+    country,
+    setError,
     setLastFetchedAt
   )
 
@@ -78,8 +82,8 @@ export const CreatePlaylist = ({
     return <Loader text={loading ? 'Creating your playlist...' : undefined} />
   }
 
-  if (error || pageError) {
-    return <ErrorPage logout={error} setToken={setToken} />
+  if (error) {
+    return <ErrorPage error={error} setToken={setToken} />
   }
 
   const tooManyArtists = selectedArtists.length > 10
@@ -121,6 +125,7 @@ export const CreatePlaylist = ({
                 setSearchLoading={setSearchLoading}
                 setSelectedArtists={setSelectedArtists}
                 token={token}
+                setError={setError}
               />
               <div>
                 <SelectedArtists

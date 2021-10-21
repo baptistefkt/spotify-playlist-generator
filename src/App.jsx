@@ -26,11 +26,13 @@ const SiteWrapper = styled.div`
 
 export const App = () => {
   const [token, setToken] = useState('')
+  const [error, setError] = useState()
+  console.log(error)
   let location = useLocation()
   const isLoginPage = location.pathname === '/login'
 
-  const { userInfo, playlists, topArtists, loading, error, setLastFetchedAt } =
-    useGetUserInfo(token)
+  const { userInfo, playlists, topArtists, loading, setLastFetchedAt } =
+    useGetUserInfo(token, setError)
 
   return (
     <>
@@ -45,7 +47,7 @@ export const App = () => {
                 playlists={playlists}
                 topArtists={topArtists}
                 pageLoading={loading}
-                pageError={error}
+                error={error}
               />
             ) : (
               <Redirect to="/login" />
@@ -65,7 +67,8 @@ export const App = () => {
                 userInfo={userInfo}
                 topArtists={topArtists}
                 pageLoading={loading}
-                pageError={error}
+                error={error}
+                setError={setError}
                 setLastFetchedAt={setLastFetchedAt}
               />
             ) : (

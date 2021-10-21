@@ -17,25 +17,31 @@ const PageContainer = styled(Main)`
     font-size: 28px;
     margin-bottom: 32px;
   }
-  a {
+  a,
+  span {
     text-decoration: underline;
+    cursor: pointer;
   }
 `
 
-export const ErrorPage = ({ logout = false, setToken }) => (
-  <PageContainer>
-    <div>
-      <h1>Oops.</h1>
-      <h2>Something went wrong...</h2>
-      {logout ? (
-        <div>
-          Let&#39;s <span onClick={() => setToken('')}>try again</span>
-        </div>
-      ) : (
-        <div>
-          Let&#39;s <Link to="/">try again</Link>
-        </div>
-      )}
-    </div>
-  </PageContainer>
-)
+export const ErrorPage = ({ error, setToken }) => {
+  if (!error) return null
+  return (
+    <PageContainer>
+      <div>
+        <h1>Oops.</h1>
+        <h2>Something went wrong...</h2>
+        {error.message === 'Only valid bearer authentication supported' ||
+        error.message === 'Invalid access token' ? (
+          <div>
+            Let&#39;s <span onClick={() => setToken('')}>try again</span>
+          </div>
+        ) : (
+          <div>
+            Let&#39;s <Link to="/">try again</Link>
+          </div>
+        )}
+      </div>
+    </PageContainer>
+  )
+}

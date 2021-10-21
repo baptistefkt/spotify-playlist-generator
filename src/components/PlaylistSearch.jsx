@@ -97,6 +97,7 @@ const PlaylistSearchNonMemo = ({
   setSearchLoading,
   setSelectedArtists,
   token,
+  setError,
 }) => {
   const searchRef = useRef(null)
 
@@ -130,7 +131,7 @@ const PlaylistSearchNonMemo = ({
           setResult(res.data.artists.items)
           setSearchLoading(false)
         })
-        .catch((err) => console.log(err))
+        .catch((err) => setError(err.response.data.error))
     } else {
       setResult([])
     }
