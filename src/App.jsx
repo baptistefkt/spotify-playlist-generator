@@ -27,7 +27,6 @@ const SiteWrapper = styled.div`
 export const App = () => {
   const [token, setToken] = useState('')
   const [error, setError] = useState()
-  console.log(error)
   let location = useLocation()
   const isLoginPage = location.pathname === '/login'
 

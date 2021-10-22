@@ -31,8 +31,7 @@ export const ErrorPage = ({ error, setToken }) => {
       <div>
         <h1>Oops.</h1>
         <h2>Something went wrong...</h2>
-        {error.message === 'Only valid bearer authentication supported' ||
-        error.message === 'Invalid access token' ? (
+        {error.message.includes('token') || error.message.includes('bearer') ? (
           <div>
             Let&#39;s <span onClick={() => setToken('')}>try again</span>
           </div>

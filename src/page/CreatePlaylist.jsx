@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 import { useCreatePlaylist } from '../api'
-import { Button, Main, media } from '../styles'
+import { Button, Main, media, theme } from '../styles'
 import { Loader } from '../components/Loader'
 import { ErrorPage } from './ErrorPage'
 import { PlaylistCreated } from '../components/PlaylistCreated'
@@ -29,6 +29,7 @@ const StyledFrom = styled.form`
       font-size: 16px;
       font-weight: 400;
       cursor: pointer;
+      color: ${theme.colors.green};
       &:hover,
       &:focus {
         text-decoration: underline;
