@@ -133,7 +133,7 @@ const PlaylistSearchNonMemo = ({
         })
         .catch((err) => {
           setSearchLoading(false)
-          setError(err.response.data.error)
+          setError(err.message)
         })
     } else {
       setResult([])

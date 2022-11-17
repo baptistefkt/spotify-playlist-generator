@@ -84,7 +84,7 @@ export const CreatePlaylist = ({
   }
 
   if (error) {
-    return <ErrorPage error={error} setToken={setToken} />
+    return <ErrorPage error={error} setToken={setToken} setError={setError} />
   }
 
   const tooManyArtists = selectedArtists.length > 10

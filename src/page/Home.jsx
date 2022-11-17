@@ -154,6 +154,7 @@ export const Home = ({
   topArtists,
   pageLoading,
   error,
+  setError,
 }) => {
   const userImgSrc =
     userInfo?.images?.length > 0 ? userInfo.images[0].url : placeholderImg
@@ -161,7 +162,9 @@ export const Home = ({
   return (
     <>
       {pageLoading && <Loader />}
-      {error && <ErrorPage error={error} setToken={setToken} />}
+      {error && (
+        <ErrorPage error={error} setToken={setToken} setError={setError} />
+      )}
       {!pageLoading && !error && (
         <Main>
           <AlignRight>

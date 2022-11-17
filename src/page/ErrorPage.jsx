@@ -24,20 +24,37 @@ const PageContainer = styled(Main)`
   }
 `
 
-export const ErrorPage = ({ error, setToken }) => {
+export const ErrorPage = ({ error, setToken, setError }) => {
   if (!error) return null
+
+  const isAuthError =
+    error.toLowerCase().includes('token') ||
+    error.toLowerCase().includes('bearer') ||
+    error.toLowerCase().includes('401')
+
   return (
     <PageContainer>
       <div>
         <h1>Oops.</h1>
         <h2>Something went wrong...</h2>
-        {error.message.includes('token') || error.message.includes('bearer') ? (
+        {isAuthError ? (
           <div>
-            Let&#39;s <span onClick={() => setToken('')}>try again</span>
+            Let&#39;s{' '}
+            <span
+              onClick={() => {
+                setToken('')
+                setError(undefined)
+              }}
+            >
+              try again
+            </span>
           </div>
         ) : (
           <div>
-            Let&#39;s <Link to="/">try again</Link>
+            Let&#39;s{' '}
+            <Link to="/" onClick={() => setError(undefined)}>
+              try again
+            </Link>
           </div>
         )}
       </div>

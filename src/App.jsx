@@ -47,6 +47,7 @@ export const App = () => {
                 topArtists={topArtists}
                 pageLoading={loading}
                 error={error}
+                setError={setError}
               />
             ) : (
               <Redirect to="/login" />

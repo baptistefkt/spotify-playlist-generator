@@ -35,7 +35,7 @@ export const useGetUserInfo = (accessToken, setError) => {
         setPlaylists(res[1])
         setTopArtists(res[2])
       })
-      .catch((err) => setError(err))
+      .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
   }, [accessToken, lastFetchedAt])
   return { userInfo, playlists, topArtists, loading, setLastFetchedAt }
@@ -60,7 +60,7 @@ export const useCreatePlaylist = (
 
       const data = await Promise.all(calls).catch((err) => {
         setLoading(false)
-        setError(err)
+        setError(err.message)
       })
 
       const albumsIds = data
@@ -85,7 +85,7 @@ export const useCreatePlaylist = (
             })
             .catch((err) => {
               setLoading(false)
-              setError(err)
+              setError(err.message)
             })
         )
       }
@@ -109,7 +109,7 @@ export const useCreatePlaylist = (
         })
         .catch((err) => {
           setLoading(false)
-          setError(err)
+          setError(err.message)
         })
 
       return tracksIds
@@ -128,7 +128,7 @@ export const useCreatePlaylist = (
       })
       .catch((err) => {
         setLoading(false)
-        setError(err)
+        setError(err.message)
       })
 
     // add tracks to playlist
@@ -138,7 +138,7 @@ export const useCreatePlaylist = (
     addTracksToPlaylist(playlist.id, await getUris(), accessToken).catch(
       (err) => {
         setLoading(false)
-        setError(err)
+        setError(err.message)
       }
     )
 
