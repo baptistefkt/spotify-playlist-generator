@@ -6,4 +6,4 @@ export const redirectUri =
     ? 'http://localhost:3000/authorized'
     : 'https://spotify-artist-playlist-generator.netlify.app/authorized'
 export const scopes =
-  'user-top-read playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public'
+  'user-read-private user-top-read playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public'
