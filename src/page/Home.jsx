@@ -157,6 +157,7 @@ export const Home = ({
 }) => {
   const userImgSrc =
     userInfo?.images?.length > 0 ? userInfo.images[0].url : placeholderImg
+
   return (
     <>
       {pageLoading && <Loader />}
@@ -178,7 +179,7 @@ export const Home = ({
             </Link>
           </UserInfoContainer>
           <FlexContainer>
-            {playlists && (
+            {!!playlists.length && (
               <div>
                 <ListTitle>Your Playlists</ListTitle>
                 <ul>
@@ -212,7 +213,7 @@ export const Home = ({
                 </ul>
               </div>
             )}
-            {topArtists && (
+            {!!topArtists.length && (
               <div>
                 <ListTitle>Your Top Artists</ListTitle>
                 <ul>
